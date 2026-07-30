@@ -8,9 +8,15 @@ audio input and output via the Sota
 """
 
 import queue
+import threading
+
 import numpy as np
 import pyaudio
 import retico_core
+import time
+
+from retico_core import AbstractModule, AbstractProducingModule, AbstractConsumingModule, UpdateMessage, \
+    AbstractTriggerModule, IncrementalUnit, UpdateType
 from retico_core.audio import AudioIU
 import sota_thinclient
 from sota_thinclient import ConnectionManager
@@ -21,7 +27,7 @@ CHANNELS = 1
 """Number of channels. For now, this is hard coded MONO. If there is interest to do
 stereo or audio with even more channels, it has to be integrated into the modules."""
 
-class SotaMicrophoneModule(retico_core.AbstractProducingModule):
+class SotaMicrophoneModule(AbstractProducingModule):
 
     """A module that produces IUs containing audio signals incoming from a Sota via the sota_thinclient module,
        streamed over a network."""
@@ -37,6 +43,10 @@ class SotaMicrophoneModule(retico_core.AbstractProducingModule):
     @staticmethod
     def output_iu():
         return AudioIU
+
+    @staticmethod     # the microphone auto-mutes when other AudioUI is active.
+    def input_ius():
+        return [AudioIU]
 
     def callback(self, in_data, frame_count, time_info, status):
         """The callback function that gets called by pyaudio.
@@ -79,13 +89,15 @@ class SotaMicrophoneModule(retico_core.AbstractProducingModule):
         if not (buffer_ms % 10 == 0):
             print ("Error: use a multiple of 10ms to play nicely with other libraries")
 
-    def process_update(self, _):
+    def process_update(self, update_message):
+
         if not self._audio_buffer:
             return None
         try:
             sample = self._audio_buffer.get(timeout=1.0)
         except queue.Empty:
             return None
+
         # print("packet")
         output_iu = self.create_iu()
         output_iu.set_audio(sample, self._frames_per_buffer, self._rate, self._sample_width)
@@ -117,8 +129,7 @@ class SotaMicrophoneModule(retico_core.AbstractProducingModule):
     def shutdown(self):
         self._sota.microphone.disable()
 
-
-class SotaSpeakerModule(retico_core.AbstractConsumingModule):
+class SotaSpeakerModule(AbstractConsumingModule):
     """A module that consumes AudioIUs of arbitrary size and outputs them to the
     Sota's speaker over the network.
      When a new IU is incoming, the module blocks as   ******** NOPE
@@ -146,6 +157,7 @@ class SotaSpeakerModule(retico_core.AbstractConsumingModule):
         data_udp_port: int,
         output_sample_rate : int = None,  # what to tell the Sota to use. None defaults to not asking
         output_sample_width : int = None,
+        speaking_trigger: AbstractTriggerModule = None,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -161,6 +173,8 @@ class SotaSpeakerModule(retico_core.AbstractConsumingModule):
         self._audio_buffer = sota.speaker.data_queue
 
         self._resampler = None
+        self._currently_making_noise = False
+        self._starting_output_trigger = speaking_trigger
 
     def _confirm_input_audio_params(self):
         self._has_incoming_audio_params = True
@@ -176,16 +190,8 @@ class SotaSpeakerModule(retico_core.AbstractConsumingModule):
     # last = None  # debug code
     # counter = 0
     def process_update(self, update_message):
-        # if not self.last: self.last=time.perf_counter()    ##DEBUG CODE
-        # now = time.perf_counter()
-        # duration = now - self.last
-        # self.last = now
-        # hz = 1/duration
-        # self.counter = (self.counter+1)%10
-        # if self.counter==0: print("duration: "+str(duration)+" hz: "+str(hz)+ " updates "+str(len(update_message))
 
         for iu, ut in update_message:
-
             if not self._has_incoming_audio_params:
                 self._incoming_sample_width = iu.sample_width*8  # we are working in bits for resampling
                 self._incoming_sample_rate = iu.rate
@@ -197,7 +203,18 @@ class SotaSpeakerModule(retico_core.AbstractConsumingModule):
                 resampled = self._resampler.resample_chunk(bytes(iu.raw_audio))
                 self._audio_buffer.put(resampled, block=False)
 
+                if self._starting_output_trigger is not None:
+                    self._starting_output_trigger.trigger(
+                        data = {
+                            SpeakerTrigger.ENERGY_KEY: self.rms_energy(resampled, self._incoming_sample_width)
+                        }
+                    )
+
         return None
+
+    def rms_energy(self, audio_bytes, sample_width_bits):
+        samples = np.frombuffer(audio_bytes, dtype=np.dtype(f"int{sample_width_bits}"))
+        return np.sqrt(np.mean(samples.astype(np.float64) ** 2))
 
     def setup(self):
         self._sota.speaker.enable(data_udp_port=self._data_udp_port)
@@ -207,3 +224,93 @@ class SotaSpeakerModule(retico_core.AbstractConsumingModule):
 
     def shutdown(self):
         self._sota.speaker.disable()
+
+
+class SpeakerStateIU(IncrementalUnit):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.is_speaking = False
+
+    @staticmethod
+    def type():
+        return "speaker_state"
+
+
+class SpeakerTrigger(AbstractTriggerModule):
+
+    ENERGY_KEY = "energy"
+    START_TALKING_THRESH = 20  # from our energy calculation
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._is_talking = None
+
+    @staticmethod
+    def output_iu():
+        return SpeakerStateIU
+
+    # Call trigger only with is_talking=True, as it will schedule the end False trigger automatically
+    #    based on the duration
+    def trigger(self, data=None, update_type=UpdateType.ADD):
+        if not self.ENERGY_KEY in data: return  # no valid data
+
+        energy = data[self.ENERGY_KEY]
+        talking = energy > SpeakerTrigger.START_TALKING_THRESH  # potential stop talking...
+
+        if talking:
+            if self._is_talking is None or not self._is_talking:
+                print("is speaking changed to: true")
+                self._is_talking = True
+                iu = self.create_iu()
+                iu.is_speaking = True
+                self.append(UpdateMessage.from_iu(iu, update_type))
+
+        else:  #not talking
+            if self._is_talking is None or self._is_talking:
+                print("is speaking changed to: false")
+                self._is_talking = False
+                iu = self.create_iu()
+                iu.is_speaking = False
+                self.append(UpdateMessage.from_iu(iu, update_type))
+
+
+class AudioGatingModule(AbstractModule):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._isSpeaking = False
+
+    @staticmethod
+    def name():
+        return "Simple Audio Gating Module"
+
+    @staticmethod
+    def description():
+        return "A simple filter that suppresses IUs from the microphone while the speaker has output."
+
+    @staticmethod
+    def input_ius():
+        return [AudioIU, SpeakerStateIU]
+
+    @staticmethod
+    def output_iu():
+        return AudioIU
+
+    def process_update(self, update_message):
+        output_update = UpdateMessage()
+        has_ius = False
+
+        for iu, ut in update_message:
+
+            if isinstance(iu, AudioIU):
+                if not self._isSpeaking:
+                    output_iu = self.create_iu(iu)
+                    output_iu.set_audio(iu.raw_audio, iu.nframes, iu.rate, iu.sample_width)
+                    output_update.add_iu(output_iu, ut)
+                    has_ius = True
+
+            elif isinstance(iu, SpeakerStateIU):
+                print("got speaker state IU")
+                self._isSpeaking = iu.is_speaking
+
+        if has_ius:
+            self.append(output_update)
