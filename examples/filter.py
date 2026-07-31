@@ -49,24 +49,28 @@ class ASRSimilarityFilterModule(AbstractModule):
                 
             else: # assume ASR output
                 # if ut == UpdateType.COMMIT:
-                #     # not sure why this was filtered out. commit messages are important upstream
+                # #     # not sure why this was filtered out. commit messages are important upstream
                 #     continue
+                if iu.final:
+                    print("final received")
+                    self._asr_buffer = ""
+                    self._tts_buffer = ""
 
-                if ut == UpdateType.REVOKE:  # TODO shouldn't we remove it???
+                if ut == UpdateType.REVOKE or ut== UpdateType.COMMIT:  # TODO shouldn't we remove it???
                     # If we revoke, we should not process this IU
                     out_um.add_iu(iu, ut)
                     continue
                 
-                self._asr_buffer += self.normalize_str(iu.payload.strip() + ' ')
+                self._asr_buffer += ASRSimilarityFilterModule.normalize_str(iu.payload.strip() + ' ')
         
-                similarity = self.compute_similarity(self._tts_buffer[:len(self._asr_buffer) - 1], self._asr_buffer, alpha=0.5)
+                similarity = ASRSimilarityFilterModule.compute_similarity(self._tts_buffer[:len(self._asr_buffer) - 1], self._asr_buffer, alpha=0.5)
                 
                 if similarity < self.max_similarity_threshold:
                     print("passed threshold: '" + iu.text + "' against "+self._tts_buffer)
                     out_um.add_iu(iu, ut)
                     has_ius = True
                 else:
-                    print(f"Filtered out ASR output due to high similarity with TTS output: "+iu.text+", "+self._tts_buffer)
+                    print(f"Filtered out ASR output due to high similarity with TTS output: '"+iu.text+"', "+self._tts_buffer)
                     
                 if iu.final:
                     print("final received")
@@ -75,16 +79,17 @@ class ASRSimilarityFilterModule(AbstractModule):
         if has_ius:
             self.append(out_um)
 
-    
-    def normalize_str(self, string):
+    @staticmethod
+    def normalize_str(string):
         # Might not work for some languages as is
         return ''.join(char.lower() for char in string if (char and char.isalnum()) or char in ["'", "-", " "])
-    
-    def compute_similarity(self, a: str, b: str, alpha: float = 0.5) -> float:
+
+    @staticmethod
+    def compute_similarity(a: str, b: str, alpha: float = 0.5) -> float:
         r"""
         Compute the hybrid similarity between two strings.
         The similarity is computed as a linear combination of cosine similarity and normalized Levenshtein distance, which is normalized to the range [0, 1]. The formula is:
-        
+
         `$ similarity = \alpha * \cos(a, b) + (1 - \alpha) * \bigl(1 - \frac{\mathrm{lev}(a, b)}{\max(|a|, |b|)}\bigr) $`
 
         Parameters
@@ -101,18 +106,18 @@ class ASRSimilarityFilterModule(AbstractModule):
         float
             A value in [0,1] indicating combined semantic/orthographic similarity.
         """
-        
+
         a = a.strip()
         b = b.strip()
-        
+
         if len(a) == 0 or len(b) == 0:
             return 0.0
-        
+
         # Normalized Levenshtein distance ([0, 1])
         dist = Levenshtein.distance(a, b)
         max_len = max(len(a), len(b)) or 1
         norm_lev = 1.0 - dist / max_len
-        
+
         # Cosine similarity ([0, 1])
         try:
             vec = TfidfVectorizer().fit([a, b])
@@ -120,14 +125,8 @@ class ASRSimilarityFilterModule(AbstractModule):
             cosine = float(cosine_similarity(tfidf[0], tfidf[1])[0, 0])
         except ValueError as e: # No valid words in the input
             return 0.0
-        
-        return alpha * cosine + (1 - alpha) * norm_lev
 
-# calculates energy of waveform. primitive
-def _rms_energy(audio_bytes, sample_width_bytes):
-    sample_width_bits = sample_width_bytes*8
-    samples = np.frombuffer(audio_bytes, dtype=np.dtype(f"int{sample_width_bits}"))
-    return np.sqrt(np.mean(samples.astype(np.float64) ** 2))
+        return alpha * cosine + (1 - alpha) * norm_lev
 
 
 # Determines speaking state based on the provided speech generation module. When there is non trivial energy
@@ -168,7 +167,7 @@ class AudioGatingModule(AbstractModule):
         for iu, ut in update_message:
 
             if iu.creator == self._speech_gen_module:  # use to establish talking state
-                self._update_is_talking_check( _rms_energy(iu.raw_audio, iu.sample_width) )
+                self._update_is_talking_check( AudioGatingModule._rms_energy(iu.raw_audio, iu.sample_width) )
 
             else:  # all other AudioIUs
                 if not self._is_talking:
@@ -180,10 +179,9 @@ class AudioGatingModule(AbstractModule):
         if has_ius:
             self.append(output_update)
 
-
     # very simple threshold that triggers a change when we cross the threshold
     def _update_is_talking_check(self, energy):
-        talking = energy > self.START_TALKING_THRESH  # potential stop talking...
+        talking = energy > self.START_TALKING_THRESH
 
         if talking:
             if self._is_talking is None or not self._is_talking:
@@ -194,3 +192,10 @@ class AudioGatingModule(AbstractModule):
             if self._is_talking is None or self._is_talking:
                 print("is speaking changed to: false")
                 self._is_talking = False
+
+    # calculates energy of waveform. primitive
+    @staticmethod
+    def _rms_energy(audio_bytes, sample_width_bytes):
+        sample_width_bits = sample_width_bytes * 8
+        samples = np.frombuffer(audio_bytes, dtype=np.dtype(f"int{sample_width_bits}"))
+        return np.sqrt(np.mean(samples.astype(np.float64) ** 2))

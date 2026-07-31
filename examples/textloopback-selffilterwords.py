@@ -2,6 +2,7 @@ from retico_core import AbstractModule, UpdateMessage, UpdateType
 from retico_core.text import SpeechRecognitionIU, TextIU
 from sota_thinclient import ConnectionManager
 
+from examples.debug_utils import text_candidate_callback
 from examples.filter import ASRSimilarityFilterModule
 from sota_retico import SotaMicrophoneModule
 from sota_retico.sota_audio import SotaSpeakerModule
@@ -10,40 +11,11 @@ from retico_speechbraintts import  SpeechBrainTTSModule
 import retico_core
 # from filter import RobotASRFilterModule, SimpleTextPassthrough
 
-SOTA_IP = "192.168.0.23"
-# SOTA_IP = "10.151.63.71"
+# SOTA_IP = "192.168.0.23"
+SOTA_IP = "10.151.63.71"
 HTTP_PORT = "8080"
 MIC_UDP_PORT = 52001
 SPEAKER_UDP_PORT = 52002
-
-
-### A debugging callback function that retico can send data to.
-# here we use it as a way to see what the ASR is picking up. It's interesting and useful for debugging.
-msg = []
-def text_candidate_callback(update_msg):
-    global msg
-
-    for x, ut in update_msg:    #update_msg is  (IU, IU type)
-        if ut == retico_core.UpdateType.ADD:
-            msg.append(x)
-
-        if ut == retico_core.UpdateType.REVOKE:
-            if x in msg:
-                msg.remove(x)
-
-    # calculate the committed message so far
-    txt = ""
-    committed = False
-    for x in msg:
-        txt += x.text + " "
-        committed = committed or x.committed
-
-    if committed:
-        msg = []
-        print("\nCommitted: "+txt)
-
-    else:
-        print("\rlive: "+txt, end="")
 
 ## A dummy module for loopback into the ASR to filter what the robot said last. Only relevant for this dummy loop
 # example
