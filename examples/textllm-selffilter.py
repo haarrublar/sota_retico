@@ -1,5 +1,7 @@
 from sota_thinclient import ConnectionManager
 from retico_huggingfacelm.huggingface_lm import HuggingfaceLM
+from sympy.physics.units import temperature
+
 from examples.debug_utils import text_candidate_callback
 from examples.filter import AudioGatingModule
 from sota_retico import SotaMicrophoneModule
@@ -32,8 +34,10 @@ print("done.")
 print("Starting hugging face lm...",end="")
 device = "cuda:0"
 # device = "cpu"
-llm_module = HuggingfaceLM.from_checkpoint("HuggingFaceTB/SmolLM2-135M-Instruct", device=device)
-llm_module.set_system_role("You are a grumpy Wizard. Keep responses concise. Limit responses to 2-3 sentences unless the user explicitly asks for more detail.")
+llm_module = HuggingfaceLM.from_checkpoint("HuggingFaceTB/SmolLM2-135M-Instruct", device=device, temperature=0.7)  # very small, quick, good for small inferences. not a healthy chatbot. Funny.
+# llm_module = HuggingfaceLM.from_checkpoint("HuggingFaceTB/SmolLM2-1.7B-Instruct", device=device, temperature=0.7)  # much more capable, but hard on weaker GPUs/cpus
+# other options SmolLM2-360M, SmolLM2-1.7B, SmolLM3-3B,   the number is the number of model parameters
+llm_module.set_system_role("You are a grumpy Wizard who does not talk a lot.")
 print("Done")
 
 self_filter_module = AudioGatingModule(tts_module, sleep_interval=0.001)
