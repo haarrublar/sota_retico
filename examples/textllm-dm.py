@@ -1,6 +1,7 @@
 from sota_thinclient import ConnectionManager
 from retico_huggingfacelm.huggingface_lm_module import HuggingfaceLMModule
 from retico_huggingfacelm.huggingface_lm_client import HuggingfaceLMClient
+from sympy.physics.units import temperature
 
 from examples.debug_utils import text_candidate_callback
 from examples.filter import AudioGatingModule
