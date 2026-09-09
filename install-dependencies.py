@@ -19,7 +19,7 @@ install(["torch==2.3.1"+gpuSuffix, "torchaudio==2.3.1"+gpuSuffix, "torchvision==
 
 install([
         "retico-core @ git+https://github.com/retico-team/retico-core@39e9957ee008b3e13ab4248040929f29056fb4ad",
-        "retico-huggingfacelm @ git+https://github.com/retico-team/retico-huggingfacelm@fee25b055e47283fb5be3fedfe4ecd6c067d2e8a",
+        "retico-huggingfacelm @ git+https://github.com/youngmb/retico-huggingfacelm",
         "retico-speechbraintts @ git+https://github.com/youngmb/retico-speechbraintts@course-fix-cpu",
         "retico-whisperasr @ git+https://github.com/retico-team/retico-whisperasr@cf568c2a8b746558ddd71b2bf6cb58ba1141d175",
 ])
