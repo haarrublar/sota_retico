@@ -1,5 +1,8 @@
 import retico_core
-from debug_utils import text_candidate_callback
+from debug_utils import (
+    close_wav,
+    text_candidate_callback,
+)
 from retico_core.audio import *
 from retico_speechbraintts import SpeechBrainTTSModule
 from retico_whisperasr import WhisperASRModule
@@ -17,6 +20,8 @@ sota = ConnectionManager(SOTA_IP, HTTP_PORT)
 
 #################initialize the retico modules
 microphone_module = SotaMicrophoneModule(sota, MIC_UDP_PORT, buffer_ms=20)
+
+# callbacks
 speaker_module = SotaSpeakerModule(sota, SPEAKER_UDP_PORT)
 text_callback_module = retico_core.debug.CallbackModule(
     callback=text_candidate_callback
@@ -45,6 +50,7 @@ microphone_module.run()
 
 print("go")
 input()  # wait for user key
+
 
 # clean up and stop
 microphone_module.stop()
