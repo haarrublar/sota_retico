@@ -1,16 +1,14 @@
+import retico_core
+from debug_utils import text_candidate_callback
 from retico_core.audio import *
+from retico_speechbraintts import SpeechBrainTTSModule
+from retico_whisperasr import WhisperASRModule
+
+from sota_retico import SotaMicrophoneModule, SotaSpeakerModule
 from sota_thinclient import ConnectionManager
 
-from examples.debug_utils import text_candidate_callback
-from sota_retico import SotaMicrophoneModule, SotaSpeakerModule
-
-from retico_whisperasr import WhisperASRModule
-from retico_speechbraintts import  SpeechBrainTTSModule
-
-import retico_core
-
 # SOTA_IP = "192.168.0.23"
-SOTA_IP = "10.151.63.71"
+SOTA_IP = "10.151.63.79"
 HTTP_PORT = "8080"
 MIC_UDP_PORT = 52001
 SPEAKER_UDP_PORT = 52002
@@ -20,7 +18,9 @@ sota = ConnectionManager(SOTA_IP, HTTP_PORT)
 #################initialize the retico modules
 microphone_module = SotaMicrophoneModule(sota, MIC_UDP_PORT, buffer_ms=20)
 speaker_module = SotaSpeakerModule(sota, SPEAKER_UDP_PORT)
-text_callback_module = retico_core.debug.CallbackModule(callback=text_candidate_callback)
+text_callback_module = retico_core.debug.CallbackModule(
+    callback=text_candidate_callback
+)
 
 print("Starting Whisper ASR...", end="")
 asr_module = WhisperASRModule()
@@ -44,9 +44,9 @@ asr_module.run()
 microphone_module.run()
 
 print("go")
-input()   # wait for user key
+input()  # wait for user key
 
-#clean up and stop
+# clean up and stop
 microphone_module.stop()
 asr_module.stop()
 tts_module.stop()

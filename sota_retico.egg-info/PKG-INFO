@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: sota_retico
+Version: 0.1.dev22+geebf7a303
+Summary: Sota integration with retico, using our in-house thinserver and thinclient
+Author-email: James Young <young@cs.umanitoba.ca>
+Requires-Python: ~=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pyaudio
+Requires-Dist: scipy
+Requires-Dist: numpy==1.26.4
+Requires-Dist: transformers==4.57.6
+Requires-Dist: sota_thinclient @ git+https://github.com/youngmb/sota_thinclient
+Provides-Extra: test

@@ -1,0 +1,20 @@
+{
+  "files": [
+    ".DS_Store",
+    ".gitignore",
+    "README.md",
+    "examples/audioloopback.py",
+    "examples/debug_utils.py",
+    "examples/dm.py",
+    "examples/filter.py",
+    "examples/llm_blank_filling.py",
+    "examples/textllm-dm.py",
+    "examples/textllm-selffilter.py",
+    "examples/textloopback-selffilter.py",
+    "examples/textloopback.py",
+    "install-dependencies.py",
+    "pyproject.toml",
+    "sota_retico/__init__.py",
+    "sota_retico/sota_audio.py"
+  ]
+}

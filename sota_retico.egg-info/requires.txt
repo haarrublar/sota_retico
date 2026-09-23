@@ -1,0 +1,7 @@
+pyaudio
+scipy
+numpy==1.26.4
+transformers==4.57.6
+sota_thinclient @ git+https://github.com/youngmb/sota_thinclient
+
+[test]
