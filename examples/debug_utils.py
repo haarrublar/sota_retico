@@ -111,3 +111,19 @@ def close_wav():
     if wav_file is not None:
         wav_file.close()
         wav_file = None
+
+
+import inspect
+
+
+def inspect_func(module, function):
+    """Print the class chain and the code of one method."""
+    print(
+        "\n", "Class chain: Parent, childrenN, childrenN-1, etc, children0=base", "\n"
+    )
+    for cls in module.__mro__:
+        print(cls.__name__)
+
+    print("\n", "Method list", "\n")
+    method = getattr(module, function)  # e.g. getattr(SotaMicrophoneModule, "_run")
+    print(inspect.getsource(method))

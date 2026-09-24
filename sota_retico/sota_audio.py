@@ -8,24 +8,28 @@ audio input and output via the Sota
 """
 
 import queue
+
 import numpy as np
 import pyaudio
 import retico_core
-
-from retico_core import AbstractProducingModule, AbstractConsumingModule
+from retico_core import AbstractConsumingModule, AbstractProducingModule
 from retico_core.audio import AudioIU
 from sota_thinclient import ConnectionManager
-from sota_thinclient.http_audio_stream import _FIELD_SAMPLERATE, _FIELD_SAMPLEWIDTH, _FIELD_BUFFERSIZE, \
-    StreamingMonoResampler
+from sota_thinclient.http_audio_stream import (
+    _FIELD_BUFFERSIZE,
+    _FIELD_SAMPLERATE,
+    _FIELD_SAMPLEWIDTH,
+    StreamingMonoResampler,
+)
 
 CHANNELS = 1
 """Number of channels. For now, this is hard coded MONO. If there is interest to do
 stereo or audio with even more channels, it has to be integrated into the modules."""
 
-class SotaMicrophoneModule(AbstractProducingModule):
 
+class SotaMicrophoneModule(AbstractProducingModule):
     """A module that produces IUs containing audio signals incoming from a Sota via the sota_thinclient module,
-       streamed over a network."""
+    streamed over a network."""
 
     @staticmethod
     def name():
@@ -39,7 +43,7 @@ class SotaMicrophoneModule(AbstractProducingModule):
     def output_iu():
         return AudioIU
 
-    @staticmethod     # the microphone auto-mutes when other AudioUI is active.
+    @staticmethod  # the microphone auto-mutes when other AudioUI is active.
     def input_ius():
         return [AudioIU]
 
@@ -57,9 +61,9 @@ class SotaMicrophoneModule(AbstractProducingModule):
         self._audio_buffer.put(in_data)
         return (in_data, pyaudio.paContinue)
 
-    def __init__(self, sota: ConnectionManager,
-                 data_udp_port: int,
-                 buffer_ms : int = 20 , **kwargs):
+    def __init__(
+        self, sota: ConnectionManager, data_udp_port: int, buffer_ms: int = 20, **kwargs
+    ):
         """
         Initialize the Sota Microphone Module.
 
@@ -82,7 +86,7 @@ class SotaMicrophoneModule(AbstractProducingModule):
         self._frames_per_buffer = None
         self._buffer_ms = buffer_ms
         if not (buffer_ms % 10 == 0):
-            print ("Error: use a multiple of 10ms to play nicely with other libraries")
+            print("Error: use a multiple of 10ms to play nicely with other libraries")
 
     def process_update(self, update_message):
 
@@ -95,24 +99,34 @@ class SotaMicrophoneModule(AbstractProducingModule):
 
         # print("packet")
         output_iu = self.create_iu()
-        output_iu.set_audio(sample, self._frames_per_buffer, self._rate, self._sample_width)
+        output_iu.set_audio(
+            sample, self._frames_per_buffer, self._rate, self._sample_width
+        )
         return retico_core.UpdateMessage.from_iu(output_iu, retico_core.UpdateType.ADD)
 
     def setup(self):
         """Set up the microphone for recording."""
-        self._sota.microphone.enable(data_udp_port=self._data_udp_port, restart_if_enabled=True)
+        self._sota.microphone.enable(
+            data_udp_port=self._data_udp_port, restart_if_enabled=True
+        )
         sota_state = self._sota.microphone.get_state(use_cached=True)
-        print("Initial mic stream state"+str(sota_state))
+        print("Initial mic stream state" + str(sota_state))
 
         self._rate = sota_state[_FIELD_SAMPLERATE]
         self._sample_width = sota_state[_FIELD_SAMPLEWIDTH] // 8
 
-        buffer_size_needed = int(self._buffer_ms * self._rate / 1000 * self._sample_width)
+        buffer_size_needed = int(
+            self._buffer_ms * self._rate / 1000 * self._sample_width
+        )
 
-        if buffer_size_needed != sota_state[_FIELD_BUFFERSIZE]:  # we need to restart with a different buffer size
-            self._sota.microphone.enable(data_udp_port=self._data_udp_port,
-                                         request_buffer_size=buffer_size_needed,
-                                         restart_if_enabled=True)
+        if (
+            buffer_size_needed != sota_state[_FIELD_BUFFERSIZE]
+        ):  # we need to restart with a different buffer size
+            self._sota.microphone.enable(
+                data_udp_port=self._data_udp_port,
+                request_buffer_size=buffer_size_needed,
+                restart_if_enabled=True,
+            )
             sota_state = self._sota.microphone.get_state(use_cached=True)
             print("Updated mic stream state" + str(sota_state))
 
@@ -123,6 +137,7 @@ class SotaMicrophoneModule(AbstractProducingModule):
 
     def shutdown(self):
         self._sota.microphone.disable()
+
 
 class SotaSpeakerModule(AbstractConsumingModule):
     """A module that consumes AudioIUs of arbitrary size and outputs them to the
@@ -150,9 +165,9 @@ class SotaSpeakerModule(AbstractConsumingModule):
         self,
         sota: ConnectionManager,
         data_udp_port: int,
-        output_sample_rate : int = None,  # what to tell the Sota to use. None defaults to not asking
-        output_sample_width : int = None,
-        **kwargs
+        output_sample_rate: int = None,  # what to tell the Sota to use. None defaults to not asking
+        output_sample_width: int = None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self._has_incoming_audio_params = False
@@ -173,11 +188,11 @@ class SotaSpeakerModule(AbstractConsumingModule):
         self._has_incoming_audio_params = True
 
     def _setup_sampler(self):
-        self._resampler =  StreamingMonoResampler(
+        self._resampler = StreamingMonoResampler(
             source_rate=self._incoming_sample_rate,
-            source_dtype=np.dtype(f'int{self._incoming_sample_width}'),
+            source_dtype=np.dtype(f"int{self._incoming_sample_width}"),
             target_rate=self._output_sample_rate,
-            target_dtype=np.dtype(f'int{self._output_sample_width}')
+            target_dtype=np.dtype(f"int{self._output_sample_width}"),
         )
 
     # last = None  # debug code
@@ -186,7 +201,9 @@ class SotaSpeakerModule(AbstractConsumingModule):
 
         for iu, ut in update_message:
             if not self._has_incoming_audio_params:
-                self._incoming_sample_width = iu.sample_width*8  # we are working in bits for resampling
+                self._incoming_sample_width = (
+                    iu.sample_width * 8
+                )  # we are working in bits for resampling
                 self._incoming_sample_rate = iu.rate
                 self._has_incoming_audio_params = True
                 self._setup_sampler()
@@ -197,12 +214,11 @@ class SotaSpeakerModule(AbstractConsumingModule):
                 self._audio_buffer.put(resampled, block=False)
         return None
 
-
     def setup(self):
         self._sota.speaker.enable(data_udp_port=self._data_udp_port)
         state = self._sota.speaker.get_state(use_cached=True)
         self._output_sample_rate = state[_FIELD_SAMPLERATE]
-        self._output_sample_width =state[_FIELD_SAMPLEWIDTH]
+        self._output_sample_width = state[_FIELD_SAMPLEWIDTH]
 
     def shutdown(self):
         self._sota.speaker.disable()
