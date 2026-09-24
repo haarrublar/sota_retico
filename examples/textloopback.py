@@ -4,18 +4,18 @@ import numpy as np
 import retico_core
 from debug_utils import (
     audio_array_callback,
-    recording,
     text_candidate_callback,
 )
 from retico_core.audio import *
 from retico_speechbraintts import SpeechBrainTTSModule
 from retico_whisperasr import WhisperASRModule
-
-from sota_retico import SotaMicrophoneModule, SotaSpeakerModule
 from sota_thinclient import ConnectionManager
 
+from sota_retico import SotaMicrophoneModule, SotaSpeakerModule
+
 # SOTA_IP = "192.168.0.23"
-SOTA_IP = "10.151.63.79"
+SOTA_IP = "10.0.0.12"
+# SOTA_IP = "10.151.63.79"
 HTTP_PORT = "8080"
 MIC_UDP_PORT = 52001
 SPEAKER_UDP_PORT = 52002
@@ -61,12 +61,10 @@ microphone_module.run()
 print("go")
 input()  # wait for user key
 
-
-THRESHOLD = 3.597831726074219e-04
-print(debug_utils.audio_info)
+THRESHOLD = 0.008
 for i, seg in enumerate(debug_utils.audio_info):
     if seg["rms"] < THRESHOLD:
-        print(f"segment {i}: rms={seg['rms']:.6f}  seconds={seg['seconds']:.2f}")
+        print(seg)
 
 microphone_module.stop()
 asr_module.stop()

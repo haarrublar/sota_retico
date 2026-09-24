@@ -60,6 +60,7 @@ import numpy as np
 
 recording = False
 sample_rate = None
+nthres = 0.0
 scut = 1.0
 max_bytes = 2**16
 audio_info = []
@@ -78,7 +79,7 @@ def audio_array_callback(update_msg):
     Args:
         update_msg: a retico UpdateMessage of (AudioIU, UpdateType) pairs.
     """
-    global wav_array, sample_rate
+    global wav_array, sample_rate, nthres
 
     if not recording:
         return
@@ -92,12 +93,13 @@ def audio_array_callback(update_msg):
                 sample_rate = x.rate
             thres = len(wav_array) / sample_rate
             if thres >= scut:
+                nthres += thres
                 norm = wav_array / max_bytes
                 audio_info.append(
                     {
                         "rate": sample_rate,
                         "audio": wav_array,
-                        "seconds": thres,
+                        "seconds": nthres,
                         "rms": np.sqrt(np.mean(norm**2)),
                     }
                 )
