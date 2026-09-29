@@ -1,16 +1,15 @@
-from sota_thinclient import ConnectionManager
-from retico_huggingfacelm.huggingface_lm_module import HuggingfaceLMModule
-from retico_huggingfacelm.huggingface_lm_client import HuggingfaceLMClient
-
-from examples.debug_utils import text_candidate_callback
-from examples.filter import AudioGatingModule
-from sota_retico import SotaMicrophoneModule
-from sota_retico import SotaSpeakerModule
-from retico_whisperasr import WhisperASRModule
-from retico_speechbraintts import  SpeechBrainTTSModule
 import retico_core
+from debug_utils import text_candidate_callback
+from filter import AudioGatingModule
+from retico_huggingfacelm.huggingface_lm_client import HuggingfaceLMClient
+from retico_huggingfacelm.huggingface_lm_module import HuggingfaceLMModule
+from retico_speechbraintts import SpeechBrainTTSModule
+from retico_whisperasr import WhisperASRModule
 
-SOTA_IP = "192.168.0.23"
+from sota_retico import SotaMicrophoneModule, SotaSpeakerModule
+from sota_thinclient import ConnectionManager
+
+SOTA_IP = "10.151.63.79"
 # SOTA_IP = "10.151.63.71"
 HTTP_PORT = "8080"
 MIC_UDP_PORT = 52001
@@ -21,7 +20,9 @@ sota = ConnectionManager(SOTA_IP, HTTP_PORT)
 #################initialize the retico modules
 microphone_module = SotaMicrophoneModule(sota, MIC_UDP_PORT, buffer_ms=20)
 speaker_module = SotaSpeakerModule(sota, SPEAKER_UDP_PORT)
-text_callback_module = retico_core.debug.CallbackModule(callback=text_candidate_callback)
+text_callback_module = retico_core.debug.CallbackModule(
+    callback=text_candidate_callback
+)
 
 print("Starting Whisper ASR...", end="")
 asr_module = WhisperASRModule()
@@ -31,11 +32,13 @@ print("Starting SpeechBrains...", end="")
 tts_module = SpeechBrainTTSModule(language="en")
 print("done.")
 
-print("Starting hugging face lm...",end="")
-device = "cuda:0"
-# device = "cpu"
+print("Starting hugging face lm...", end="")
+# device = "cuda:0"
+device = "cpu"
 # llm_client = HuggingfaceLMClient.quick_from_checkpoint("HuggingFaceTB/SmolLM2-135M-Instruct", device=device, temperature=0.7)  # very small, quick, good for small inferences. not a healthy chatbot. Funny.
-llm_client = HuggingfaceLMClient.quick_from_checkpoint("HuggingFaceTB/SmolLM2-1.7B-Instruct", device=device, temperature=0.7)  # much more capable, but hard on weaker GPUs/cpus
+llm_client = HuggingfaceLMClient.quick_from_checkpoint(
+    "Qwen/Qwen2.5-0.5B-Instruct", device=device, temperature=0.7
+)  # much more capable, but hard on weaker GPUs/cpus
 llm_module = HuggingfaceLMModule(llm_client)
 # other options SmolLM2-360M, SmolLM2-1.7B, SmolLM3-3B,   the number is the number of model parameters
 llm_client.set_system_role("You are a grumpy Wizard who does not talk a lot.")
@@ -62,9 +65,9 @@ microphone_module.run()
 llm_module.run()
 
 print("go")
-input()   # wait for user key
+input()  # wait for user key
 
-#clean up and stop
+# clean up and stop
 microphone_module.stop()
 asr_module.stop()
 tts_module.stop()
