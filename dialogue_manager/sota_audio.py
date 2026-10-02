@@ -7,6 +7,7 @@ This module defines basic incremental units and incremental modules to handle
 audio input and output via the Sota
 """
 
+import math
 import queue
 
 import numpy as np
@@ -103,7 +104,6 @@ class SotaMicrophoneModule(AbstractProducingModule):
         output_iu.set_audio(
             sample, self._frames_per_buffer, self._rate, self._sample_width
         )
-        output_iu.meta_data["owner"] = "sota"
         return retico_core.UpdateMessage.from_iu(output_iu, retico_core.UpdateType.ADD)
 
     def setup(self):

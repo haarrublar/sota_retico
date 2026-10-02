@@ -12,7 +12,10 @@ MODEL_URL = (
     "https://storage.googleapis.com/mediapipe-models/face_landmarker/"
     "face_landmarker/float16/1/face_landmarker.task"
 )
-MODEL_PATH = "face_landmarker.task"
+# Save the model next to this script, no matter where it's run from
+MODEL_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "face_landmarker.task"
+)
 LIPS = vision.FaceLandmarksConnections.FACE_LANDMARKS_LIPS
 
 UPPER_LIP, LOWER_LIP = 13, 14  # inner lips (center)
@@ -20,6 +23,22 @@ LEFT_CORNER, RIGHT_CORNER = 61, 291  # mouth corners
 
 OPEN_THRESHOLD = 0.05  # opening / width ratio above this = mouth open (tune this!)
 SPEAK_HOLD_SEC = 0.2  # stay "speaking" this long after the mouth last opened
+
+
+def ensure_model():
+    """Download the face landmarker model if it isn't already on disk."""
+    if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 0:
+        return
+    print(f"Downloading model to {MODEL_PATH} ...")
+    tmp_path = MODEL_PATH + ".part"
+    try:
+        urllib.request.urlretrieve(MODEL_URL, tmp_path)
+        os.replace(tmp_path, MODEL_PATH)  # only keep it if the download finished
+    except Exception as e:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise SystemExit(f"Could not download model: {e}")
+    print("Done.")
 
 
 def dist(a, b, w, h):
@@ -34,6 +53,8 @@ def mouth_ratio(face, w, h):
 
 
 def main():
+    ensure_model()
+
     options = vision.FaceLandmarkerOptions(
         base_options=mp_tasks.BaseOptions(model_asset_path=MODEL_PATH),
         running_mode=vision.RunningMode.VIDEO,

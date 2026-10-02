@@ -1,38 +1,92 @@
-from audioManager import AudioAnnotator, AudioClassifier, SilenceRemover, WavFile
-from sota_audio import SotaMicrophoneModule
-from userMicrophoneModule import UserMicrophoneModule
+# from audio_manager import (
+#     AudioAnnotator,
+#     AudioClassifier,
+#     SilenceRemover,
+#     WavFile,
+# )
+# from execution_manager import ModuleGraph
+# from sota_audio import SotaMicrophoneModule
 
+# from sota_thinclient import ConnectionManager
+
+# SOTA_IP = "10.151.63.79"
+# HTTP_PORT = "8080"
+# MIC_UDP_PORT = 52001
+
+# sota = ConnectionManager(SOTA_IP, HTTP_PORT)
+# sota_mic = SotaMicrophoneModule(sota, MIC_UDP_PORT, buffer_ms=20)
+# audio_annotator = AudioAnnotator()
+# silence_filter = SilenceRemover()
+# sota_audio = AudioClassifier(keep="sota")
+# sota_wav = WavFile("sota.wav")
+
+# execution_order = {
+#     "sota": {sota_mic: [audio_annotator, silence_filter, sota_audio, sota_wav]},
+# }
+
+# graph = ModuleGraph(execution_order)
+# graph.show()  # prints the connections, to check them
+
+# graph.run()  # subscribes everything, then starts receivers first, mic last
+# input("running... press Enter to stop\n")
+# graph.stop()  # mic first, so nothing new enters
+# print("stopped")
+
+
+import time
+
+import retico_core
+from audio_manager import (
+    AudioAnnotator,
+    AudioClassifier,
+    SilenceRemover,
+    WavFile,
+)
+from execution_manager import ModuleGraph
+from retico_core.text import TextIU
+from retico_speechbraintts import SpeechBrainTTSModule
+from sota_audio import SotaMicrophoneModule
+
+from sota_retico import SotaSpeakerModule
 from sota_thinclient import ConnectionManager
 
 SOTA_IP = "10.151.63.79"
 HTTP_PORT = "8080"
 MIC_UDP_PORT = 52001
+SPEAKER_UDP_PORT = 52002
 
-user_mic = UserMicrophoneModule()
 sota = ConnectionManager(SOTA_IP, HTTP_PORT)
 sota_mic = SotaMicrophoneModule(sota, MIC_UDP_PORT, buffer_ms=20)
 audio_annotator = AudioAnnotator()
 silence_filter = SilenceRemover()
-# user_wav = WavFile("user.wav")
-sota_wav = WavFile("sota.wav")
 sota_audio = AudioClassifier(keep="sota")
-# user_audio = AudioClassifier(keep="user")
+sota_wav = WavFile("sota.wav")
+
+sota_speaker = SotaSpeakerModule(sota, SPEAKER_UDP_PORT)  # NEW
+tts_module = SpeechBrainTTSModule(language="en")  # NEW
+
+execution_order = {
+    "sota": {sota_mic: [audio_annotator, silence_filter, sota_audio, sota_wav]},
+    "speak": {tts_module: sota_speaker},  # NEW: tts → speaker
+}
+
+graph = ModuleGraph(execution_order)
+graph.show()  # prints the connections, to check them
+graph.run()  # subscribes everything, then starts receivers first, mic last
 
 
-# subscribing modules
-# user_mic.subscribe(audio_annotator)
-# audio_annotator.subscribe(user_audio)
-sota_mic.subscribe(audio_annotator)
-audio_annotator.subscribe(silence_filter)
-silence_filter.subscribe(sota_audio)
-sota_audio.subscribe(sota_wav)
+def say(text):  # NEW: make Sota speak, as if the asr had committed `text`
+    iu = TextIU(creator=sota_audio, iuid=f"say:{time.time()}")
+    iu.payload = text
+    msg = retico_core.UpdateMessage()
+    msg.add_iu(iu, retico_core.UpdateType.ADD)
+    msg.add_iu(iu, retico_core.UpdateType.COMMIT)
+    tts_module.process_update(msg)
 
 
-modules = [sota_wav, sota_audio, silence_filter, audio_annotator, sota_mic]
-for m in modules:  # receivers first, mics last
-    m.run()
+time.sleep(2)  # a few seconds of room silence first
+say("Hello, I am Sota. This is a test of my voice for the recording.")
 
 input("running... press Enter to stop\n")
-
-for m in reversed(modules):  # mics first
-    m.stop()
+graph.stop()  # mic first, so nothing new enters
+print("stopped")
