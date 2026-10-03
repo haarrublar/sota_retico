@@ -1,3 +1,28 @@
+"""
+Turn gate for sota's mic.
+
+How it works:
+- when the user finishes (ASR commit) the gate closes, sota's turn starts.
+- it waits until the speaker sends speech and sota's mic actually hears it.
+- it reopens when sota had time to play everything it got (sent seconds)
+  and the mic is quiet for a bit (0.6 s window).
+
+What I found:
+- sota was taking longer and longer to reopen the gate, and long replies
+  ended up echoed back into the ASR. I first thought the robot was late
+  (speaker or mic), but recording sota's mic and the pc mic at the same
+  time shoId both hear sota at the same moment, so the robot is fine.
+- the delay was on our side. retico calls process_update about 40 times
+  per second, but sota's mic sends 50 chunks per second (20 ms each).
+  the gate only took one chunk per call, so the queue kept growing
+  (~10 chunks per second, ~5 s behind after 30 s).
+- fix: on every call I also take everything already waiting in the queue.
+  queue stays at 0, gate lag stays under 30 ms, and the gate closes for
+  basically the speech time.
+- if another module gets one message per chunk, it can fall behind the
+  same way, the same fix works there.
+"""
+
 import queue
 import time
 from collections import deque
@@ -5,7 +30,6 @@ from collections import deque
 import numpy as np
 from retico_core import AbstractModule, UpdateMessage
 from retico_core.audio import AudioIU
-from timeline import mark
 
 
 class AudioGatingModule(AbstractModule):
@@ -81,7 +105,8 @@ class AudioGatingModule(AbstractModule):
             print(f"  speech sent  {sent:.2f} s")
             print(f"  extra wait   {now - self._first_heard - sent:.2f} s")
 
-    def process_update(self, update_message):
+    def _drain(self, update_message):
+        # retico calls us slower than the mic sends chunks, so take everything waiting
         messages = [update_message]
         for q in self._left_buffers:
             while True:
@@ -89,25 +114,21 @@ class AudioGatingModule(AbstractModule):
                     messages.append(q.get_nowait())
                 except queue.Empty:
                     break
+        return messages
 
+    def process_update(self, update_message):
         out = UpdateMessage()
-        t_start = time.perf_counter()
-        for iu, ut in update_message:
-            mark("gate_lag", time.time() - iu.created_at)
-            if not self._is_open:
-                x = np.frombuffer(iu.raw_audio, dtype=np.int16) / 32768
-                rms = float(np.sqrt(np.mean(x**2))) if len(x) else 0.0
-                self._update(rms, time.time())
+        for um in self._drain(update_message):
+            for iu, ut in um:
+                if not self._is_open:
+                    x = np.frombuffer(iu.raw_audio, dtype=np.int16) / 32768
+                    rms = float(np.sqrt(np.mean(x**2))) if len(x) else 0.0
+                    self._update(rms, time.time())
 
-            if self._is_open:
-                o = self.create_iu(iu)
-                o.set_audio(iu.raw_audio, iu.nframes, iu.rate, iu.sample_width)
-                out.add_iu(o, ut)
+                if self._is_open:
+                    o = self.create_iu(iu)
+                    o.set_audio(iu.raw_audio, iu.nframes, iu.rate, iu.sample_width)
+                    out.add_iu(o, ut)
 
         if len(out):
             self.append(out)
-        self._calls = getattr(self, "_calls", 0) + 1
-        if self._calls % 50 == 0:  # once per second
-            took = (time.perf_counter() - t_start) * 1000
-            waiting = sum(q.qsize() for q in self._left_buffers)
-            print(f"[GATE] process_update {took:.1f} ms, chunks waiting {waiting}")

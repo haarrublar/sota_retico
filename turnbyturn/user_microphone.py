@@ -2,7 +2,6 @@ import pyaudio
 import retico_core
 from retico_core.abstract import AbstractProducingModule, UpdateMessage
 from retico_core.audio import AudioIU
-from timeline import mark, rms
 
 
 class UserMicrophoneModule(AbstractProducingModule):
@@ -59,7 +58,6 @@ class UserMicrophoneModule(AbstractProducingModule):
     def process_update(self, _):
         if self.stream is not None:
             data = self.stream.read(self.chunk, exception_on_overflow=False)
-            mark("pc", rms(data))
         iu = self.create_iu()
         iu.set_audio(data, self.chunk, self.rate, 2)
         iu.meta_data["owner"] = "user"

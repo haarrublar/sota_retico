@@ -21,7 +21,6 @@ from sota_thinclient.http_audio_stream import (
     _FIELD_SAMPLEWIDTH,
     StreamingMonoResampler,
 )
-from timeline import mark, rms
 
 from sota_thinclient import ConnectionManager
 
@@ -97,7 +96,6 @@ class SotaMicrophoneModule(AbstractProducingModule):
             return None
         try:
             sample = self._audio_buffer.get(timeout=1.0)
-            mark("sota", rms(sample))
         except queue.Empty:
             return None
 
@@ -217,7 +215,6 @@ class SotaSpeakerModule(AbstractConsumingModule):
             if ut == retico_core.UpdateType.ADD:
                 # tts sends silence when it has nothing to say
                 silent = not np.any(np.frombuffer(iu.raw_audio, dtype=np.int16))
-                mark("speaker", not silent)
 
                 # print when sota starts/stops getting speech
                 if self.speaking != (not silent):
