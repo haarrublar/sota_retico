@@ -127,14 +127,11 @@ class SpeechBrainTTSModule(retico_core.AbstractModule):
             self.current_input = []
 
     def _tts_thread(self):
-        t1 = time.time()
         while self._tts_thread_active:
-            t2 = t1
-            t1 = time.time()
-            if t1 - t2 < self.frame_duration:
-                time.sleep(self.frame_duration)
-            else:
-                time.sleep(max((2 * self.frame_duration) - (t1 - t2), 0))
+            has_audio = self.audio_pointer < len(self.audio_buffer)
+            time.sleep(
+                0.02 if has_audio else self.frame_duration
+            )  # fast while there's audio to send
 
             if self.audio_pointer >= len(self.audio_buffer):
                 raw_audio = (

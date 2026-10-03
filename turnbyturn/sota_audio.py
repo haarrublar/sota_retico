@@ -7,7 +7,6 @@ This module defines basic incremental units and incremental modules to handle
 audio input and output via the Sota
 """
 
-import math
 import queue
 import time
 
@@ -22,7 +21,7 @@ from sota_thinclient.http_audio_stream import (
     _FIELD_SAMPLEWIDTH,
     StreamingMonoResampler,
 )
-from sota_thinclient.pose import SotaState
+from timeline import mark, rms
 
 from sota_thinclient import ConnectionManager
 
@@ -98,6 +97,7 @@ class SotaMicrophoneModule(AbstractProducingModule):
             return None
         try:
             sample = self._audio_buffer.get(timeout=1.0)
+            mark("sota", rms(sample))
         except queue.Empty:
             return None
 
@@ -188,7 +188,9 @@ class SotaSpeakerModule(AbstractConsumingModule):
         self._resampler = None
         self._currently_making_noise = False
 
-        self.busy_until = 0
+        self.busy_until = 0  # used by SotaActions
+        self.speaking = False  # true while speech chunks are coming in
+        self.sent_seconds = 0.0  # total speech sent, used by the gate
 
     def _confirm_input_audio_params(self):
         self._has_incoming_audio_params = True
@@ -201,8 +203,6 @@ class SotaSpeakerModule(AbstractConsumingModule):
             target_dtype=np.dtype(f"int{self._output_sample_width}"),
         )
 
-    # last = None  # debug code
-    # counter = 0
     def process_update(self, update_message):
 
         for iu, ut in update_message:
@@ -215,18 +215,26 @@ class SotaSpeakerModule(AbstractConsumingModule):
                 self._setup_sampler()
 
             if ut == retico_core.UpdateType.ADD:
-                if not np.any(np.frombuffer(iu.raw_audio, dtype=np.int16)):
-                    continue  # skip pure-silence chunks
+                # tts sends silence when it has nothing to say
+                silent = not np.any(np.frombuffer(iu.raw_audio, dtype=np.int16))
+                mark("speaker", not silent)
+
+                # print when sota starts/stops getting speech
+                if self.speaking != (not silent):
+                    self.speaking = not silent
+                    print(
+                        f"[SPEAKER] {'speech' if self.speaking else 'silence'}  t={time.time():.2f}"
+                    )
+
+                # don't send silence to sota
+                if silent:
+                    continue
                 resampled = self._resampler.resample_chunk(bytes(iu.raw_audio))
                 self._audio_buffer.put(resampled, block=False)
 
-                duration = len(iu.raw_audio) / (iu.sample_width * iu.rate)
-                self.busy_until = max(self.busy_until, time.time()) + duration
+                # keep track of how much speech went out
+                self.sent_seconds += len(iu.raw_audio) / (iu.sample_width * iu.rate)
 
-            # if ut == retico_core.UpdateType.ADD:
-            #     # if self.counter==0:  print("message len "+ str(len(iu.raw_audio)))
-            #     resampled = self._resampler.resample_chunk(bytes(iu.raw_audio))
-            #     self._audio_buffer.put(resampled, block=False)
         return None
 
     def setup(self):
@@ -238,13 +246,3 @@ class SotaSpeakerModule(AbstractConsumingModule):
 
     def shutdown(self):
         self._sota.speaker.disable()
-
-    # def setup(self):
-    #     self._sota.speaker.enable(data_udp_port=self._data_udp_port)
-    #     state = self._sota.speaker.get_state(use_cached=True)
-    #     print("Speaker state:", state)
-    #     self._output_sample_rate = state[_FIELD_SAMPLERATE]
-    #     self._output_sample_width = state[_FIELD_SAMPLEWIDTH]
-
-    # def shutdown(self):
-    #     self._sota.speaker.disable()
