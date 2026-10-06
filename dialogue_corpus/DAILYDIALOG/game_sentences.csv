@@ -1,0 +1,680 @@
+utterance,intent
+You betrayed me!,inform
+I think you will defect.,inform
+You defected last round.,inform
+I promise I will cooperate this time.,commissive
+Okay, I'll cooperate.,commissive
+Fine, I won't defect.,commissive
+Let's both cooperate.,directive
+Please don't betray me.,directive
+Cooperate this time.,directive
+Will you betray me?,question
+Are you going to cooperate?,question
+Why did you defect?,question
+You chose to defect.,inform
+You cooperated last round.,inform
+I noticed you betrayed me.,inform
+You have betrayed me before.,inform
+I think you are going to cooperate.,inform
+You seem ready to defect.,inform
+You chose cooperation.,inform
+You chose betrayal.,inform
+I saw your choice last round.,inform
+Your decision hurt our score.,inform
+We both cooperated last round.,inform
+We both defected last round.,inform
+I cooperated but you defected.,inform
+You cooperated but I defected.,inform
+I promise to cooperate with you.,commissive
+I will not betray you.,commissive
+I will choose cooperation.,commissive
+I won't defect this round.,commissive
+You have my word that I will cooperate.,commissive
+I promise not to betray you.,commissive
+I'll trust you and cooperate.,commissive
+I will cooperate if you do.,commissive
+I won't change my choice at the last moment.,commissive
+This round, I choose cooperation.,commissive
+I promise we can work together.,commissive
+I will keep cooperating with you.,commissive
+I won't betray your trust.,commissive
+I promise to stay loyal this round.,commissive
+Let's cooperate this round.,directive
+Please cooperate with me.,directive
+Don't defect this time.,directive
+Please keep your promise.,directive
+Let's trust each other.,directive
+Choose cooperation.,directive
+Don't betray me again.,directive
+Work with me this round.,directive
+Let's avoid mutual defection.,directive
+Please choose the cooperative option.,directive
+Trust me and cooperate.,directive
+Don't change your choice.,directive
+Let's get the best outcome together.,directive
+Please don't choose betrayal.,directive
+Cooperate so we can both benefit.,directive
+Can I trust you this round?,question
+Will you cooperate with me?,question
+Are you planning to defect?,question
+Did you betray me last round?,question
+Why did you choose defection?,question
+Why didn't you cooperate?,question
+Will you keep your promise?,question
+Do you trust me to cooperate?,question
+Are you going to keep cooperating?,question
+Will you choose cooperation?,question
+Did you cooperate last round?,question
+Why did you betray me?,question
+Are you trying to maximize your score?,question
+Do you think I will defect?,question
+Do you want us both to cooperate?,question
+What will you choose this round?,question
+Will you betray me again?,question
+Can we cooperate this time?,question
+Do you think we should cooperate?,question
+Are you willing to trust me?,question
+I don't trust your decision.,inform
+Your choice surprised me.,inform
+I expected you to cooperate.,inform
+I expected you to defect.,inform
+You broke your promise.,inform
+You kept your promise.,inform
+Our choices resulted in a good outcome.,inform
+Our choices resulted in a poor outcome.,inform
+We could have earned more by cooperating.,inform
+Your defection cost us both points.,inform
+I will cooperate even if you defect.,commissive
+I promise I won't punish you by defecting.,commissive
+I will give cooperation another chance.,commissive
+I will trust you this round.,commissive
+I promise to choose the same strategy we agreed on.,commissive
+Let's make a deal to cooperate.,directive
+Please give cooperation a chance.,directive
+Let's keep our agreement.,directive
+Don't let our last round affect this one.,directive
+Please choose trust over betrayal.,directive
+Wow, you really sold me out.,inform
+I trusted you, and you chose chaos.,inform
+You defected like a cartoon villain.,inform
+Well, that cooperation lasted five seconds.,inform
+I can't believe you actually betrayed me.,inform
+You really looked me in the eyes and defected.,inform
+Our friendship just lost a few points.,inform
+That was a bold little betrayal.,inform
+I saw that defection coming from a mile away.,inform
+You chose betrayal with confidence.,inform
+Apparently, trust was not on today's menu.,inform
+You really said "teamwork" and then defected.,inform
+I thought we were partners!,inform
+You just threw our cooperation out the window.,inform
+That was not very cooperative of you.,inform
+You betrayed me faster than I expected.,inform
+Our beautiful alliance lasted exactly one round.,inform
+You have officially entered your villain era.,inform
+I can't believe you pulled that move.,inform
+You chose points over friendship.,inform
+I promise I won't betray you this time.,commissive
+Okay, okay, I swear I'll cooperate.,commissive
+I promise I'm not plotting against you.,commissive
+You have my totally trustworthy word.,commissive
+I will cooperate like a responsible citizen.,commissive
+I promise there will be no funny business.,commissive
+I swear I'm choosing cooperation.,commissive
+I will not stab you in the back this round.,commissive
+I promise to behave myself.,commissive
+I will cooperate, pinky promise.,commissive
+I promise I'm not secretly choosing defect.,commissive
+I will be nice this time.,commissive
+I promise not to unleash my inner villain.,commissive
+I will cooperate and resist the temptation.,commissive
+I swear I'm on Team Cooperation.,commissive
+Let's cooperate before this gets awkward.,directive
+Please don't betray me again, I have feelings.,directive
+Can we just cooperate like civilized humans?,directive
+Choose cooperation, you know you want to.,directive
+Please don't turn into a villain this round.,directive
+Let's not ruin this beautiful friendship.,directive
+Cooperate with me and nobody gets hurt emotionally.,directive
+Please put the betrayal button away.,directive
+Let's make the sensible choice for once.,directive
+Don't do anything suspicious.,directive
+Please cooperate before I start getting nervous.,directive
+Let's trust each other and pretend we're professionals.,directive
+Don't betray me just for a few extra points.,directive
+Please choose cooperation and make me proud.,directive
+Let's work together instead of becoming enemies.,directive
+Are you seriously going to betray me again?,question
+Will you cooperate, or are you feeling villainous today?,question
+Can I trust you, or should I hide my points?,question
+Are you planning something suspicious?,question
+Will you cooperate like you promised?,question
+Why did you betray me when we had a deal?,question
+Are you about to ruin our friendship for points?,question
+Do you really think I'm going to trust you after that?,question
+Will you choose cooperation, mysterious stranger?,question
+Are you secretly planning to defect?,question
+Can we please have one peaceful round?,question
+Are you going to stab me in the back again?,question
+Do you want to cooperate or start a rivalry?,question
+Why are you looking so suspicious?,question
+Are you going to be nice this time?,question
+Did you just betray me for two points?,inform
+You really chose chaos today.,inform
+That defection was personal.,inform
+Our trust has entered the chat and immediately left.,inform
+You just broke our imaginary alliance.,inform
+I guess cooperation was too much to ask.,inform
+You betrayed me with absolutely no hesitation.,inform
+That was the least cooperative cooperation I've ever seen.,inform
+You really woke up and chose defection.,inform
+Our strategy has officially gone off the rails.,inform
+I promise to cooperate even if you're being dramatic.,commissive
+I will cooperate because apparently I'm the responsible one.,commissive
+I promise not to cause any diplomatic incidents.,commissive
+I will choose cooperation and keep the peace.,commissive
+I promise you can trust me this round.,commissive
+I swear I'm not about to pull a plot twist.,commissive
+I will cooperate because we're better together.,commissive
+I promise no betrayal surprises this time.,commissive
+I will choose cooperation like a true teammate.,commissive
+I promise to keep my evil plans to myself.,commissive
+Let's cooperate and confuse everyone who expects betrayal.,directive
+Please don't make me regret trusting you.,directive
+Choose cooperation and let's call it a friendship.,directive
+Let's both cooperate and celebrate our tiny victory.,directive
+Please don't betray me for the sake of drama.,directive
+Let's cooperate before someone writes a sad story about us.,directive
+Don't defect just because you can.,directive
+Please choose peace, friendship, and cooperation.,directive
+Let's prove that teamwork isn't completely fictional.,directive
+Cooperate with me and we can both feel clever.,directive
+Would you betray me if you knew I was trusting you?,question
+Do you really want to start a defection war?,question
+Are we cooperating or are we choosing chaos?,question
+Will you keep your promise for more than one round?,question
+Can I trust you with my precious points?,question
+Are you going to cooperate or surprise me again?,question
+Do you actually believe I will betray you?,question
+Why does your strategy look so suspicious?,question
+Will you cooperate if I promise to cooperate?,question
+Are we friends, or is this just a very competitive game?,question
+Sota, I trusted you and you betrayed me.,inform
+You really defected on me, Sota.,inform
+Sota chose betrayal again.,inform
+I cooperated with Sota, but Sota defected.,inform
+Sota kept its promise last round.,inform
+The robot actually cooperated with me.,inform
+Sota surprised me with that choice.,inform
+I thought Sota would cooperate.,inform
+Sota clearly had other plans.,inform
+The robot just betrayed me for points.,inform
+Sota and I both cooperated last round.,inform
+We both defected last round.,inform
+I cooperated, but Sota went for the points.,inform
+Sota broke our agreement.,inform
+The robot remembered what it promised.,inform
+Sota seems to trust me now.,inform
+I don't think Sota trusts me anymore.,inform
+Sota's last decision was definitely a betrayal.,inform
+The robot chose cooperation this time.,inform
+Sota just pulled a sneaky move.,inform
+I think Sota is getting suspicious of me.,inform
+Sota seems determined to defect.,inform
+The robot is becoming very competitive.,inform
+Sota gave me a chance to cooperate.,inform
+I think Sota learned from the last round.,inform
+Sota seems to remember my betrayal.,inform
+The robot didn't forget what I did.,inform
+Sota cooperated even after I defected.,inform
+I think Sota is testing whether I can be trusted.,inform
+Sota just earned more points than me.,inform
+Sota's strategy is getting interesting.,inform
+The robot seems happier when we cooperate.,inform
+Sota definitely did not appreciate that betrayal.,inform
+I think Sota expected me to cooperate.,inform
+The robot caught me defecting.,inform
+Sota seems to be keeping track of our history.,inform
+I broke my promise to Sota last round.,inform
+Sota kept cooperating despite my betrayal.,inform
+The robot is giving me another chance.,inform
+Sota seems unusually suspicious today.,inform
+I promise I will cooperate with Sota this round.,commissive
+Sota, I swear I won't betray you again.,commissive
+I promise to choose cooperation this time.,commissive
+I will cooperate with the robot.,commissive
+Sota has my word that I will cooperate.,commissive
+I promise there will be no robot betrayal today.,commissive
+I won't defect against you, Sota.,commissive
+I promise to keep our agreement.,commissive
+I will trust Sota this round.,commissive
+I promise I won't pull another surprise on you.,commissive
+Sota, you can count on me to cooperate.,commissive
+I promise not to ruin our partnership.,commissive
+I will cooperate even if Sota looks suspicious.,commissive
+I swear I am choosing cooperation.,commissive
+I promise not to become Sota's villain today.,commissive
+I will give Sota another chance.,commissive
+I promise to play fairly with the robot.,commissive
+Sota, I promise I am not plotting against you.,commissive
+I will cooperate and rebuild your trust.,commissive
+I promise this round will be different.,commissive
+Sota, let's cooperate this round.,directive
+Please don't betray me again, robot.,directive
+Let's work together, Sota.,directive
+Sota, choose cooperation.,directive
+Please trust me this time.,directive
+Let's both cooperate and get the better outcome.,directive
+Don't defect just because you can, Sota.,directive
+Please give me another chance.,directive
+Sota, let's keep our agreement.,directive
+Let's not turn this into a robot-versus-human war.,directive
+Please cooperate with me, Sota.,directive
+Let's show everyone that humans and robots can cooperate.,directive
+Don't betray your human teammate.,directive
+Sota, let's choose peace over points.,directive
+Please don't activate your evil robot strategy.,directive
+Let's cooperate before things get awkward.,directive
+Sota, trust me for one more round.,directive
+Please don't punish me for my last mistake.,directive
+Let's try cooperation again.,directive
+Sota, let's make this round a win for both of us.,directive
+Will Sota cooperate with me?,question
+Sota, are you going to betray me?,question
+Can I trust you this round, Sota?,question
+Are you planning to defect?,question
+Why did Sota betray me last round?,question
+Will the robot keep its promise?,question
+Does Sota actually trust me?,question
+Are you going to cooperate with your human teammate?,question
+Sota, are you still mad about my last choice?,question
+Will you forgive my previous betrayal?,question
+Do you think I will defect again?,question
+Sota, are you testing me?,question
+Are you trying to trick me into cooperating?,question
+Will you choose points over our partnership?,question
+Do you really think I will betray you?,question
+Sota, can we trust each other?,question
+Are you going to surprise me again?,question
+Why did you choose defection?,question
+Will you cooperate even if I defect?,question
+Sota, what are you planning this round?,question
+Sota, you really betrayed your human teammate.,inform
+I can't believe the robot sold me out.,inform
+Sota chose chaos instead of cooperation.,inform
+The robot has officially entered villain mode.,inform
+Sota betrayed me with perfect robotic confidence.,inform
+Apparently, robots can hold grudges too.,inform
+Sota just destroyed our beautiful alliance.,inform
+The robot remembered my mistake and got revenge.,inform
+Sota definitely has a competitive side.,inform
+Our human-robot partnership did not survive that round.,inform
+Sota chose points over friendship.,inform
+The robot just gave me the ultimate trust test.,inform
+Sota seems to enjoy keeping me guessing.,inform
+Our cooperation lasted exactly one round.,inform
+Sota just pulled a plot twist.,inform
+The robot is becoming suspiciously good at this game.,inform
+Sota's strategy is starting to scare me a little.,inform
+I think Sota just outsmarted me.,inform
+The robot has learned my strategy.,inform
+Sota seems to know when I'm bluffing.,inform
+I promise not to betray my favorite robot.,commissive
+Sota, I promise to behave myself this round.,commissive
+I promise not to give the robot another reason to distrust me.,commissive
+I will cooperate with my robotic teammate.,commissive
+I promise I won't activate my human villain mode.,commissive
+Sota, I swear I am choosing cooperation.,commissive
+I promise to treat the robot fairly.,commissive
+I will cooperate because teamwork includes robots too.,commissive
+I promise to stop being suspicious of Sota.,commissive
+I will not betray our human-robot alliance.,commissive
+Sota, I promise there will be no plot twist this time.,commissive
+I promise to make the robot proud.,commissive
+I will cooperate because I don't want a robot grudge.,commissive
+I promise not to make Sota regret trusting me.,commissive
+Sota, I promise I'm on your team.,commissive
+I will give cooperation another chance.,commissive
+I promise I won't defect behind your back.,commissive
+I will choose cooperation and keep the peace.,commissive
+I promise to earn Sota's trust.,commissive
+I will cooperate even if the robot is suspicious.,commissive
+Sota, please don't betray your human partner.,directive
+Let's prove humans and robots can work together.,directive
+Please cooperate with your favorite human.,directive
+Sota, don't become a robot supervillain.,directive
+Let's make this a peaceful human-robot partnership.,directive
+Please trust your human teammate.,directive
+Sota, put the betrayal strategy away.,directive
+Let's cooperate and make the robot-human alliance stronger.,directive
+Don't let one bad round ruin our partnership.,directive
+Sota, give me one more chance.,directive
+Please don't use your robot intelligence against me.,directive
+Let's both cooperate and make history.,directive
+Sota, let's confuse everyone by actually trusting each other.,directive
+Please don't turn this game into a robot uprising.,directive
+Let's cooperate before the robot takes over.,directive
+Sota, be nice to your human teammate.,directive
+Let's choose cooperation and avoid unnecessary drama.,directive
+Please don't hold my last betrayal against me.,directive
+Sota, let's work together like a proper team.,directive
+Let's show that trust works between humans and robots.,directive
+Sota, are you plotting a robot uprising?,question
+Can a human actually trust a robot?,question
+Sota, do you forgive me for defecting?,question
+Are you going to betray your human teammate?,question
+Do robots have feelings about betrayal?,question
+Sota, are you secretly judging my strategy?,question
+Will you cooperate even though I'm human?,question
+Are you keeping track of all my betrayals?,question
+Sota, do you remember what I promised?,question
+Are you going to get revenge this round?,question
+Can we start over and cooperate?,question
+Sota, do you trust me after that mistake?,question
+Are you trying to teach me a lesson?,question
+Will you give me another chance?,question
+Sota, are you becoming too good at this game?,question
+Do you think humans are trustworthy?,question
+Are you going to choose cooperation or revenge?,question
+Sota, are you bluffing right now?,question
+Can I convince you to cooperate?,question
+Will our human-robot alliance survive another round?,question
+Sota, that was a very suspicious robot move.,inform
+You really made me question trusting robots.,inform
+Sota just gave me trust issues.,inform
+The robot has apparently discovered revenge.,inform
+Our alliance is hanging by a thread.,inform
+Sota seems to have a memory better than mine.,inform
+The robot definitely noticed my betrayal.,inform
+Sota is making cooperation surprisingly difficult.,inform
+I think the robot is playing mind games with me.,inform
+Sota just turned a simple game into a drama series.,inform
+I promise I won't make Sota regret trusting humans.,commissive
+I promise to cooperate with the robot from now on.,commissive
+Sota, I promise this human can be trusted.,commissive
+I will cooperate and prove myself to Sota.,commissive
+I promise not to betray the robot again.,commissive
+I will choose cooperation because I value our alliance.,commissive
+Sota, I promise to keep my word this time.,commissive
+I will cooperate even if Sota doesn't trust me yet.,commissive
+I promise to stop acting suspiciously.,commissive
+I will make cooperation my default strategy.,commissive
+Sota, let's cooperate and make the scoreboard happy.,directive
+Please give the human another chance.,directive
+Let's make Sota and the human a winning team.,directive
+Don't let the robot-human alliance fall apart.,directive
+Sota, please choose cooperation instead of revenge.,directive
+Let's cooperate and leave the drama for another game.,directive
+Please trust me for just one more round.,directive
+Sota, let's prove that betrayal isn't always the answer.,directive
+Let's cooperate and see what happens.,directive
+Please don't make me regret trusting a robot.,directive
+Sota, will you trust me one last time?,question
+Can we cooperate without betraying each other?,question
+Are you going to forgive my last move?,question
+Sota, do you think we're a good team?,question
+Will you cooperate if I cooperate?,question
+Are you still suspicious of me?,question
+Do you think our alliance can survive?,question
+Sota, are you planning another surprise?,question
+Can I trust a robot that betrayed me?,question
+Will you give cooperation another chance?,question
+Sota, are we teammates or enemies?,question
+Do you want to beat me or cooperate with me?,question
+Are you going to choose friendship over points?,question
+Can humans and robots actually trust each other?,question
+Sota, are you ready to cooperate?,question
+Why did you choose betrayal after promising cooperation?,question
+Will you keep your promise this time?,question
+Sota, are you trying to trick me?,question
+Do you want us both to win?,question
+Can we end this game as friends?,question
+Nice move, Sota. You totally betrayed me.,inform
+I cooperated and you defected. Seriously?,inform
+We both played nice that round.,inform
+You just stole the points from me.,inform
+Sota kept its word this time.,inform
+That was a clean cooperation round.,inform
+I knew you were going to defect.,inform
+You caught me off guard with that choice.,inform
+We both defected. Great, now nobody wins.,inform
+I trusted you and you sold me out.,inform
+Sota and I are still tied.,inform
+You broke our deal.,inform
+That round went surprisingly well.,inform
+You really went for the points.,inform
+I gave you cooperation and got betrayal.,inform
+Sota seems to be learning my strategy.,inform
+We finally managed to cooperate.,inform
+That was a terrible outcome for both of us.,inform
+I think Sota expected me to defect.,inform
+You played that round very aggressively.,inform
+Our strategy actually worked.,inform
+You betrayed me right after promising not to.,inform
+Sota is getting pretty competitive.,inform
+I think we're starting to understand each other.,inform
+You just threw away a perfectly good cooperation.,inform
+That was definitely a revenge move.,inform
+Sota remembered what happened last round.,inform
+I made the wrong choice that time.,inform
+You got the better payoff that round.,inform
+We could have both scored more.,inform
+I promise I won't defect this round.,commissive
+Sota, I swear I'm cooperating.,commissive
+I'll keep my word this time.,commissive
+I promise there won't be any betrayal.,commissive
+I'm going with cooperation.,commissive
+You can trust me this round.,commissive
+I won't sell you out again.,commissive
+I'll cooperate if you cooperate.,commissive
+I promise to give you another chance.,commissive
+I'm not defecting this time.,commissive
+Sota, you've got my word.,commissive
+I'll play fair this round.,commissive
+I promise not to pull anything sneaky.,commissive
+I'm sticking with our agreement.,commissive
+I won't let one bad round ruin this.,commissive
+Okay, Sota, cooperation it is.,commissive
+I'm putting my trust in you.,commissive
+I promise I'll choose the team play.,commissive
+No betrayal from me this round.,commissive
+I'll try cooperation one more time.,commissive
+Let's cooperate and take the win.,directive
+Sota, don't defect on me again.,directive
+Come on, let's work together.,directive
+Please keep your promise.,directive
+Let's both cooperate this time.,directive
+Don't throw away our points.,directive
+Trust me and cooperate.,directive
+Sota, give me a break and cooperate.,directive
+Let's stop fighting and cooperate.,directive
+Don't make me regret trusting you.,directive
+Choose cooperation. We both benefit.,directive
+Let's reset and try again.,directive
+Sota, don't get greedy.,directive
+Please don't betray me again.,directive
+Let's play this round clean.,directive
+Work with me here.,directive
+Don't turn this into a revenge game.,directive
+Let's get the good payoff together.,directive
+Give cooperation another shot.,directive
+Sota, let's be teammates for once.,directive
+Are you going to cooperate?,question
+Why did you defect?,question
+Sota, can I trust you?,question
+Are you planning to betray me again?,question
+What are you choosing this round?,question
+Did you really just defect?,question
+Why didn't you keep your promise?,question
+Do you want us both to score well?,question
+Are you going for the higher payoff?,question
+Will you cooperate if I cooperate?,question
+Sota, are you bluffing?,question
+Do you think I'll defect?,question
+Are you trying to get revenge?,question
+Can we trust each other again?,question
+Why did you choose betrayal?,question
+Are you seriously going to defect again?,question
+Do you actually want to cooperate?,question
+Sota, what's your move?,question
+Are you playing fair?,question
+Can we make a deal?,question
+Oh come on, Sota! That was dirty.,inform
+You really pulled the betrayal card on me.,inform
+Well, there goes our beautiful alliance.,inform
+Sota just chose violence.,inform
+I can't believe you did that.,inform
+You had one job: cooperate.,inform
+That was cold, Sota.,inform
+You really went full villain mode.,inform
+Our friendship lasted exactly one round.,inform
+Okay, betrayal noted.,inform
+You just activated my trust issues.,inform
+That was a sneaky little move.,inform
+Sota, you're becoming too good at this.,inform
+I see how it is.,inform
+You really said teamwork and then defected.,inform
+Well, that escalated quickly.,inform
+Sota has officially entered competitive mode.,inform
+You chose points over friendship. Rude.,inform
+That betrayal was personal.,inform
+I thought we had something special, Sota.,inform
+Fine, I'll cooperate. Don't make me regret it.,commissive
+Okay, okay, I won't betray you.,commissive
+Sota, I'm calling a truce.,commissive
+I'll stop being dramatic and cooperate.,commissive
+I promise I won't pull another plot twist.,commissive
+Fine. You win. I'll cooperate.,commissive
+I'm giving you one more chance.,commissive
+I'll trust the robot again.,commissive
+I promise not to be sneaky.,commissive
+I'm putting the betrayal plan away.,commissive
+Sota, let's bury the hatchet.,commissive
+I'll cooperate because apparently we're friends now.,commissive
+I promise no funny business.,commissive
+I'm choosing peace this round.,commissive
+I won't hold that last betrayal against you.,commissive
+I'll give cooperation another shot.,commissive
+Okay, Sota, we're cool.,commissive
+I promise to behave myself.,commissive
+I'll be the bigger person and cooperate.,commissive
+Come on, Sota, let's cooperate before this gets ugly.,directive
+Don't be a menace. Just cooperate.,directive
+Please stop betraying me!,directive
+Sota, put the evil robot plan away.,directive
+Let's not make this personal.,directive
+Come on, give me a break.,directive
+Don't be greedy, Sota.,directive
+Let's settle this like civilized players.,directive
+Stop messing with me and cooperate.,directive
+Let's call a truce.,directive
+Sota, don't make me regret trusting robots.,directive
+Choose cooperation, you little troublemaker.,directive
+Let's stop the nonsense and cooperate.,directive
+Please don't turn this into a rivalry.,directive
+Give me one peaceful round.,directive
+Let's cooperate and move on.,directive
+Sota, don't make me come after those points.,directive
+Put the betrayal strategy on pause.,directive
+Let's be reasonable for one round.,directive
+Don't ruin this for both of us.,directive
+Are you kidding me, Sota?,question
+Why would you betray me after that deal?,question
+Do you seriously want to start a defection war?,question
+Sota, are you trying to make me angry?,question
+Are you going to pull that move again?,question
+Why are you being so sneaky?,question
+Do you really think I'll trust you after that?,question
+Are you trying to steal my points?,question
+Sota, what was that supposed to be?,question
+Are you going to cooperate or cause chaos?,question
+Why did you choose the selfish move?,question
+Do you even remember our agreement?,question
+Are you trying to test my patience?,question
+Sota, are you seriously defecting again?,question
+Do you want revenge that badly?,question
+Can we stop betraying each other?,question
+Are you playing mind games with me?,question
+Why are you making this so complicated?,question
+Do you actually want to win together?,question
+Sota, can we just cooperate already?,question
+We both defected and got punished for it.,inform
+Mutual defection was a terrible idea.,inform
+We both chose the safe option and lost the bonus.,inform
+Cooperation gave us the better payoff.,inform
+Sota and I finally found a strategy that works.,inform
+The last round was a complete disaster.,inform
+I think our cooperation is becoming consistent.,inform
+Sota defected because I defected first.,inform
+I started the rivalry, so I can't complain.,inform
+We keep punishing each other for past moves.,inform
+Sota seems to be responding to my choices.,inform
+Our payoffs are better when we cooperate.,inform
+I think revenge is hurting both of us.,inform
+The game is getting more competitive every round.,inform
+We finally broke the cycle of defection.,inform
+Sota gave me a chance to rebuild trust.,inform
+I think we're developing a pattern.,inform
+Our last round was surprisingly cooperative.,inform
+I defected because I didn't trust Sota.,inform
+Sota cooperated even though I expected betrayal.,inform
+I promise I'll stop retaliating.,commissive
+I'll cooperate even if you defected last round.,commissive
+Sota, I'll break the cycle with cooperation.,commissive
+I promise not to punish you for your last move.,commissive
+I'll trust you instead of playing it safe.,commissive
+I promise to cooperate for the next round.,commissive
+I'm willing to repair our alliance.,commissive
+I'll give you the benefit of the doubt.,commissive
+Sota, I promise to stop playing revenge games.,commissive
+I'll cooperate and see if you return the favor.,commissive
+I promise to reward your cooperation with mine.,commissive
+I'll take the risk and cooperate.,commissive
+I'm willing to trust you again.,commissive
+I promise to focus on the long game.,commissive
+I'll cooperate even though I'm nervous about it.,commissive
+Sota, I'm resetting my strategy.,commissive
+I'll choose cooperation instead of revenge.,commissive
+I promise we can turn this around.,commissive
+I'm giving teamwork another chance.,commissive
+I promise this doesn't have to become a robot-human rivalry.,commissive
+Let's break the defection cycle.,directive
+Sota, cooperate and I'll do the same.,directive
+Let's focus on the next round instead of revenge.,directive
+Stop punishing each other and work together.,directive
+Let's take the cooperative payoff.,directive
+Sota, trust me despite the last round.,directive
+Let's rebuild the alliance.,directive
+Don't let one betrayal decide the whole game.,directive
+Let's play the long game.,directive
+Cooperate now and we both benefit later.,directive
+Sota, let's reset our strategy.,directive
+Let's stop retaliating.,directive
+Give me a reason to trust you again.,directive
+Let's make cooperation our new strategy.,directive
+Don't let the last round control this one.,directive
+Let's turn this game around.,directive
+Sota, let's try something different: cooperation.,directive
+Let's stop chasing revenge points.,directive
+Work with me for the next few rounds.,directive
+Let's see if trust can actually work.,directive
+Will you cooperate even after I defected?,question
+Sota, are you willing to forgive me?,question
+Can we stop retaliating against each other?,question
+Do you think cooperation can still work?,question
+Will you trust me after what happened?,question
+Are you going to remember my last move?,question
+Sota, are you trying to teach me a lesson?,question
+Can we rebuild our trust?,question
+Will you cooperate if I take the first step?,question
+Are you willing to break the cycle?,question
+Do you want to keep fighting over points?,question
+Sota, can we try a different strategy?,question
+Will you give me another chance?,question
+Do you think we can both win?,question
+Are you going to forgive that betrayal?,question
+Can we cooperate for several rounds?,question
+Sota, do you trust me enough to cooperate?,question
+Are you still playing revenge strategy?,question
+Can we stop making each other lose points?,question
+Do you want to end this rivalry?,question

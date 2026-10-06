@@ -1,0 +1,148 @@
+"""
+Turn gate for sota's mic.
+
+How it works:
+- when the user finishes (ASR commit) the gate closes, sota's turn starts.
+- it waits until the speaker sends speech and sota's mic actually hears it.
+- it reopens when sota had time to play everything it got (sent seconds)
+  and the mic is quiet for a bit (0.6 s window).
+
+What I found:
+- sota was taking longer and longer to reopen the gate, and long replies
+  ended up echoed back into the ASR. I first thought the robot was late
+  (speaker or mic), but recording sota's mic and the pc mic at the same
+  time shoId both hear sota at the same moment, so the robot is fine.
+- the delay was on our side. retico calls process_update about 40 times
+  per second, but sota's mic sends 50 chunks per second (20 ms each).
+  the gate only took one chunk per call, so the queue kept growing
+  (~10 chunks per second, ~5 s behind after 30 s).
+- fix: on every call I also take everything already waiting in the queue.
+  queue stays at 0, gate lag stays under 30 ms, and the gate closes for
+  basically the speech time.
+- if another module gets one message per chunk, it can fall behind the
+  same way, the same fix works there.
+"""
+
+import queue
+import time
+from collections import deque
+
+import numpy as np
+from retico_core import AbstractModule, UpdateMessage
+from retico_core.audio import AudioIU
+
+
+class AudioGatingModule(AbstractModule):
+    """Closes on the user's commit, reopens once sota's voice has played and gone quiet."""
+
+    SPEECH_RMS = 0.03  # mic above this = voice
+    NOISE_SUM = 0.15  # window sum below this = silence
+    WINDOW = 30  # 30 x 20 ms = 0.6 s, longer than sota's pauses
+    LOUD_CHUNKS = 5  # 0.1 s of voice before we trust it's sota
+    TTS_MARGIN = (
+        1.5  # time for piper to synthesize the last sentence after the llm finishes
+    )
+    TIMEOUT = 15.0  # sota never talked (empty reply), open anyway
+
+    def __init__(self, speaker_module, llm_module=None, **kwargs):
+        super().__init__(**kwargs)
+        self.speaker = speaker_module
+        self.llm = llm_module  # None = no llm (echo test)
+        self._window = deque(maxlen=self.WINDOW)
+        self._is_open = True
+        self._closed_at = 0.0
+        self._reset_turn()
+
+    @staticmethod
+    def name():
+        return "Turn Gating Module"
+
+    @staticmethod
+    def description():
+        return "User -> sota -> user, based on mic RMS"
+
+    @staticmethod
+    def input_ius():
+        return [AudioIU]
+
+    @staticmethod
+    def output_iu():
+        return AudioIU
+
+    def _reset_turn(self):
+        self._base = self.speaker.sent_seconds  # speech sent before this turn
+        self._sent = False  # speaker started sending this turn
+        self._loud = 0  # loud chunks since then
+        self._first_heard = 0.0  # when sota's voice reached the mic
+        self._window.clear()
+
+    def expect_reply(self, *_):
+        """Call on ASR commit: user is done, sota's turn starts."""
+        self._reset_turn()
+        self._is_open = False
+        self._closed_at = time.time()
+        print(f"gate: CLOSED (sota's turn)  t={self._closed_at:.2f}")
+
+    def _update(self, rms, now):
+        self._window.append(rms)
+
+        if self.speaker.speaking:
+            self._sent = True
+        if self._sent and rms > self.SPEECH_RMS:
+            self._loud += 1
+            if self._loud == self.LOUD_CHUNKS:
+                self._first_heard = now
+
+        heard = self._loud >= self.LOUD_CHUNKS
+        sent = self.speaker.sent_seconds - self._base
+        played_all = heard and now > self._first_heard + sent
+        silence = (
+            len(self._window) == self.WINDOW and sum(self._window) < self.NOISE_SUM
+        )
+
+        # the whole reply is written, and piper had time to make the last sentence
+        llm_done = self.llm is None or (
+            self.llm.reply_done and now > self.llm.done_at + self.TTS_MARGIN
+        )
+        sota_finished = (
+            played_all and silence and not self.speaker.speaking and llm_done
+        )
+        sota_silent = not heard and llm_done and now - self._closed_at > self.TIMEOUT
+
+        if sota_finished or sota_silent:
+            self._is_open = True
+            print(f"gate: OPEN (your turn)  t={now:.2f}")
+            print(f"  closed for   {now - self._closed_at:.2f} s")
+            print(
+                f"  sota started {self._first_heard - self._closed_at:.2f} s after close"
+            )
+            print(f"  speech sent  {sent:.2f} s")
+            print(f"  extra wait   {now - self._first_heard - sent:.2f} s")
+
+    def _drain(self, update_message):
+        # retico calls us slower than the mic sends chunks, so take everything waiting
+        messages = [update_message]
+        for q in self._left_buffers:
+            while True:
+                try:
+                    messages.append(q.get_nowait())
+                except queue.Empty:
+                    break
+        return messages
+
+    def process_update(self, update_message):
+        out = UpdateMessage()
+        for um in self._drain(update_message):
+            for iu, ut in um:
+                if not self._is_open:
+                    x = np.frombuffer(iu.raw_audio, dtype=np.int16) / 32768
+                    rms = float(np.sqrt(np.mean(x**2))) if len(x) else 0.0
+                    self._update(rms, time.time())
+
+                if self._is_open:
+                    o = self.create_iu(iu)
+                    o.set_audio(iu.raw_audio, iu.nframes, iu.rate, iu.sample_width)
+                    out.add_iu(o, ut)
+
+        if len(out):
+            self.append(out)

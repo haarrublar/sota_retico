@@ -167,6 +167,7 @@ class SotaSpeakerModule(AbstractConsumingModule):
         self,
         sota: ConnectionManager,
         data_udp_port: int,
+        debug: bool = False,
         output_sample_rate: int = None,  # what to tell the Sota to use. None defaults to not asking
         output_sample_width: int = None,
         **kwargs,
@@ -189,6 +190,7 @@ class SotaSpeakerModule(AbstractConsumingModule):
         self.busy_until = 0  # used by SotaActions
         self.speaking = False  # true while speech chunks are coming in
         self.sent_seconds = 0.0  # total speech sent, used by the gate
+        self.debug = debug
 
     def _confirm_input_audio_params(self):
         self._has_incoming_audio_params = True
@@ -219,9 +221,10 @@ class SotaSpeakerModule(AbstractConsumingModule):
                 # print when sota starts/stops getting speech
                 if self.speaking != (not silent):
                     self.speaking = not silent
-                    print(
-                        f"[SPEAKER] {'speech' if self.speaking else 'silence'}  t={time.time():.2f}"
-                    )
+                    if self.debug:
+                        print(
+                            f"[SPEAKER] {'speech' if self.speaking else 'silence'}  t={time.time():.2f}"
+                        )
 
                 # don't send silence to sota
                 if silent:
