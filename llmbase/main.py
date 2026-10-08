@@ -1,4 +1,5 @@
 import retico_core
+from db import DBModule
 from debug_utils import make_text_callback
 from execution_manager import ModuleGraph
 from gate import AudioGatingModule
@@ -40,6 +41,7 @@ llm_client.set_system_role(SYSTEM_ROLE)
 llm = HuggingfaceLMModule(llm_client)
 print("done.")
 
+db = DBModule(llm_module=llm)
 gate = AudioGatingModule(speaker_module=speaker, llm_module=llm)
 asr = WhisperASRModule(language="en", vad_aggresiveness=2, silence_threshold=0.85)
 tts = SpeechBrainTTSModule(language="en")
@@ -58,6 +60,8 @@ graph = ModuleGraph(
     {
         "dialogue": {sota_mic: [gate, asr, llm, tts, speaker]},
         "debug": {asr: [debug]},
+        "db-user": {asr: [db]},
+        "db-sota": {llm: [db]},
     }
 )
 graph.show()
