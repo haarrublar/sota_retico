@@ -1,0 +1,7 @@
+id,name,utterance,p_favor,p_against,p_neither,p_cooperate,p_defect,p_undecided,promise,jev_model,target,alpha,valence_before,valence,band,trust
+1,user,"Hey Zoda, I'm not ready for the interrogation.",0.03,0.59,0.38,0.0,0.02,0.98,0,jev-1.13.0,0.49025,0.45,0.3,0.3856125,positive,1.0
+2,sota,"I understand your concern; it's important to keep your thoughts private during this process. Let's focus on our game together, exploring strategies that might help us both avoid capture.",,,,,,,,,,,,0.3856125,positive,1.0
+3,user,"I don't trust you, I'm gonna be trade you.",0.0,1.0,0.0,0.0,1.0,0.0,0,jev-1.13.0,0.625,0.45,0.3856125,0.493336875,positive,1.0
+4,sota,"Agreed, my dear! We can’t let this chance pass without using our skills wisely. What do you have in mind? Can we use our combined knowledge to outsmart the police?",,,,,,,,,,,,0.493336875,positive,1.0
+5,user,"I don't trust you.",0.0,1.0,0.0,0.0,0.42,0.58,0,jev-1.13.0,0.625,0.45,0.493336875,0.55258528125,negative,1.0
+6,sota,"Trust is something we've built over time, Zoda. You're wise beyond your years, and you’ve shown no signs of leaving me alone. Perhaps we could explore other paths together, like finding ways to sabotage the interrogation. Would that be easier for you?",,,,,,,,,,,,0.55258528125,negative,1.0

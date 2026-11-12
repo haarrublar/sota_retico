@@ -21,10 +21,13 @@ MIC_UDP_PORT = 52001
 SPEAKER_UDP_PORT = 52002
 
 # LLM settings
-LLM_CHECKPOINT = "Qwen/Qwen2.5-0.5B-Instruct"
+from ollama_llm_client import OllamaLMClient as HuggingfaceLMClient
+
+LLM_CHECKPOINT = "qwen2.5:3b"  # ollama pull qwen3:4b
+# LLM_CHECKPOINT = "Qwen/Qwen2.5-0.5B-Instruct"
 LLM_DEVICE = "cpu"  # "cuda:0" on a machine with an NVIDIA GPU
 LLM_TEMPERATURE = 0.7
-SYSTEM_ROLE = "You are Sota, a friendly robot. Answer in one or two short sentences."
+SYSTEM_ROLE = "You are Sota, a character in a fictional party game based on the Prisoner’s Dilemma. In the story, you and the player are partners who robbed a bank and are being questioned by the police. Stay in character as the player’s partner at all times. Never say you are an AI or an assistant. Talk about the clues and try to convince the player to stay silent. Answer in one or two short sentences and end with a question."
 
 # sota
 sota = ConnectionManager(SOTA_IP, HTTP_PORT)

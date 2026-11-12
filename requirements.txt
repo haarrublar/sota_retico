@@ -1,0 +1,102 @@
+absl-py==2.5.0
+annotated-types==0.8.0
+anyio==4.15.1
+attrs==26.1.0
+brotlicffi @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_05qpoetyrv/croot/brotlicffi_1736182869800/work
+certifi @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_541lf40aku/croot/certifi_1754570641531/work/certifi
+cffi @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_51d1gdg4kr/croot/cffi_1736183297412/work
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+cloudpickle==3.1.2
+coloredlogs==15.0.1
+contourpy==1.3.3
+cycler==0.12.1
+dlinfo==2.0.0
+filelock @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_90zocybn3d/croot/filelock_1744281394121/work
+flatbuffers==25.12.19
+fonttools==4.66.0
+fsspec==2026.9.0
+gmpy2 @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_a9jzez1qcu/croot/gmpy2_1738085473561/work
+h11==0.16.0
+hf-xet==1.6.0
+httpcore==1.0.9
+httpcore2==2.13.1
+httpx==0.28.1
+httpx2==2.13.1
+huggingface_hub==0.36.2
+humanfriendly==10.0
+HyperPyYAML==1.2.3
+idna==3.20
+jax==0.4.38
+jaxlib==0.4.38
+Jinja2 @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_f4xtf61_ib/croot/jinja2_1741715270435/work
+joblib==1.6.0
+kiwisolver==1.5.1
+Levenshtein==0.27.5
+MarkupSafe @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_76vhch455b/croot/markupsafe_1738584048225/work
+matplotlib==3.11.2
+mediapipe==0.10.21
+mkl-fft @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_af8wl3mjfu/croot/mkl_fft_1695058185839/work
+mkl-random @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_0fq2s894lk/croot/mkl_random_1695059822529/work
+mkl-service==2.4.0
+ml_dtypes==0.5.4
+mpmath @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_8fyoqwupl2/croot/mpmath_1690848275746/work
+narwhals==2.26.0
+networkx @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_ba1do7fwxc/croot/networkx_1737043398715/work
+numpy @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_b7iptlxgej/croot/numpy_and_numpy_base_1708638622773/work/dist/numpy-1.26.4-cp311-cp311-macosx_10_9_x86_64.whl#sha256=3bf79c94c35598ae09c687371bfc007b468f0f9ce08e944366b60431f3a9a4fe
+ollama==0.6.3
+onnxruntime==1.23.2
+opencv-contrib-python==4.11.0.86
+opencv-python==4.11.0.86
+opt_einsum==3.4.0
+packaging==26.3
+pandas==3.0.6
+pathvalidate==3.3.1
+phonemizer==3.4.0
+pillow @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_59qe1phg3h/croot/pillow_1752524533185/work
+piper-tts==1.8.0
+protobuf==4.25.9
+PyAudio==0.2.14
+pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
+pydantic==2.14.1
+pydantic_core==2.50.1
+pydub==0.25.1
+pyparsing==3.3.3
+PySocks @ file:///Users/ec2-user/ci_py311/pysocks_1678315868424/work
+python-dateutil==2.9.0.post0
+PyYAML @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_34t43scp15/croot/pyyaml_1728658999838/work
+RapidFuzz==3.14.6
+regex==2026.9.10
+requests @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_3c5r_7_lxu/croot/requests_1750426340266/work
+retico-core @ git+https://github.com/retico-team/retico-core@39e9957ee008b3e13ab4248040929f29056fb4ad
+retico-huggingfacelm @ git+https://github.com/youngmb/retico-huggingfacelm@58ee4d087ec50435e33725df5dea51c5aed22099
+retico-speechbraintts @ git+https://github.com/youngmb/retico-speechbraintts@c8710f5276833009ab39681827efaa741ac4d684
+retico-whisperasr @ git+https://github.com/retico-team/retico-whisperasr@cf568c2a8b746558ddd71b2bf6cb58ba1141d175
+ruamel.yaml==0.18.17
+ruamel.yaml.clib==0.2.15
+safetensors==0.8.0
+scikit-learn==1.9.1
+scipy==1.17.1
+sentencepiece==0.2.2
+six==1.17.0
+sota_retico @ file:///Users/haarrublar/Library/CloudStorage/OneDrive-UniversityofManitoba/Documents/UofM/fall2026/LLMDialog-F26/SOTA/sota_retico
+sota_thinclient @ git+https://github.com/youngmb/sota_thinclient@9ed4f171ffe64614545ba0ccb3443b328b92afdb
+sounddevice==0.5.6
+soundfile==0.14.0
+speechbrain @ git+https://github.com/speechbrain/speechbrain.git@89ead74d163463d30c62329a09cfdb4c54f5abc1
+SQLAlchemy==2.1.4
+sympy @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_3ej0z2jk7t/croot/sympy_1738108502551/work
+tenacity==9.2.1
+threadpoolctl==3.7.0
+tokenizers==0.22.2
+torch==2.2.2
+torchaudio==2.2.2
+torchvision==0.17.2
+tqdm==4.70.1
+transformers==4.57.6
+truststore==0.10.5
+typesafe-sdk==0.7.5
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+urllib3 @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_f8xnjmnanx/croot/urllib3_1750775879857/work
+vaderSentiment==3.3.2
+webrtcvad==2.0.10
